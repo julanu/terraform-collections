@@ -12,21 +12,24 @@ resource "tfe_workspace" "managed_ws" {
 }
 
 resource "tfe_variable_set" "managed_varset" {
-  name          = "tf-${var.variable_sets[0]}-vars"
-  description   = var.varset_description
-  organization  = data.tfe_organization.carrello_org.name
+  name         = "tf-${var.variable_sets[0]}-vars"
+  description  = var.varset_description
+  organization = data.tfe_organization.carrello_org.name
 }
 
 resource "tfe_workspace_variable_set" "test" {
-  count = length(var.managed_workspaces )
+  count           = length(var.managed_workspaces)
   workspace_id    = tfe_workspace.managed_ws[count.index].id
   variable_set_id = tfe_variable_set.managed_varset.id
 }
 
-resource "tfe_variable" "test-a" {
-  key             = "seperate_variable"
-  value           = "my_value_name"
-  category        = "terraform"
-  description     = "a useful description"
-  variable_set_id = tfe_variable_set.test.id
+resource "tfe_variable" "variable" {
+  for_each = var.variables
+
+  key       = each.value["key"]
+  value     = each.value["value"]
+  category  = each.value["category"]
+  sensitive = each.value["sensitive"]
+
+  variable_set_id = tfe_variable_set.managed_varset.id
 }
