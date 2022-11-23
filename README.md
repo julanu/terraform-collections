@@ -73,6 +73,36 @@ variables = {
 
 
 ## ---> azure / modules  <a name="azure-tf"></a>
+### ToDo add project init details
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_acr"></a> [acr](#module\_acr) | ./acr | n/a |
+
+### Providers
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | 3.11.0 |
+
+### Resources
+| Name | Type |
+|------|------|
+| [azurerm_container_registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry) | resource |
+
+### Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_registry_name"></a> [registry\_name](#input\_registry\_name) | Name for Azure Container Registry | `string` | `"bestContainerRegistryEver"` | no |
+| <a name="input_registry_sku"></a> [registry\_sku](#input\_registry\_sku) | SKU to be used for the Container Registry | `string` | n/a | yes |
+| <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | Azure Resource Group for resources | `string` | n/a | yes |
+| <a name="input_rsg_location"></a> [rsg\_location](#input\_rsg\_location) | Resource Group Location | `string` | n/a | yes |
+| <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id) | Azure Subcription ID | `string` | n/a | yes |
+
+
+
 ## ---> aws_ / modules  <a name="aws-tf"></a>
 
 
