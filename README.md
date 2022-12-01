@@ -4,7 +4,6 @@ This repository holds Terraform modules created to ease the creation of certain 
 ### Table of contents
 
 1. [Terraform Cloud](#tf-cloud) <br />
-1.1 [Terraform Cloud - Module Contents](#tfc-module-contents)
 1. [Microsoft Azure](#azure-tf)
 1. [Amazon Web Services](#aws-tf)
 
@@ -15,7 +14,7 @@ Using the following configuration, iterating over the `managed-workspaces` list 
 <br />
 
 For secrets management, this configuration will provide you with a managed variable set, available in your Terraform Cloud organization, with the naming convetion `tf-<variable-sets>-vars`, the variable set will be attached to all the workspaces that will be created.
-```terraform
+```bash
 cloud_provider     = "aws"
 tfc_organization   = "carrello-org"
 common_tags        = ["project:aws", "env:sandbox"]
@@ -37,69 +36,21 @@ variables = {
 }
 ```
 
-
-### Modules <a name="tfc-module-contents"></a>
-
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_tfe_cloud"></a> [tfe\_cloud](#module\_tfe\_cloud) | ./tfe_workspaces | n/a |
-### Providers
-
-| Name | Version |
-|------|---------|
-| <a name="provider_tfe"></a> [tfe](#provider\_tfe) | 0.36.1 |
-
-### Resources
-
-| Name | Type |
-|------|------|
-| [tfe_variable.variable](https://registry.terraform.io/providers/hashicorp/tfe/0.36.1/docs/resources/variable) | resource |
-| [tfe_variable_set.managed_varset](https://registry.terraform.io/providers/hashicorp/tfe/0.36.1/docs/resources/variable_set) | resource |
-| [tfe_workspace.managed_ws](https://registry.terraform.io/providers/hashicorp/tfe/0.36.1/docs/resources/workspace) | resource |
-| [tfe_workspace_variable_set.ws_variableset](https://registry.terraform.io/providers/hashicorp/tfe/0.36.1/docs/resources/workspace_variable_set) | resource |
-| [tfe_organization.carrello_org](https://registry.terraform.io/providers/hashicorp/tfe/0.36.1/docs/data-sources/organization) | data source |
-
-### Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_cloud_provider"></a> [cloud\_provider](#input\_cloud\_provider) | Cloud provider used to be added in the workspace naming | `string` | n/a | yes |
-| <a name="input_common_tags"></a> [common\_tags](#input\_common\_tags) | Tags to be applied to the managed workspaces | `list(string)` | n/a | yes |
-| <a name="input_managed_workspaces"></a> [managed\_workspaces](#input\_managed\_workspaces) | List of names for the workspaces to be added in the naming | `list(string)` | n/a | yes |
-| <a name="input_tfc_organization"></a> [tfc\_organization](#input\_tfc\_organization) | Terraform Cloud organization name | `string` | n/a | yes |
-| <a name="input_variable_sets"></a> [variable\_sets](#input\_variable\_sets) | List of the names to be added in the TF managed variable sets | `list(string)` | n/a | yes |
-| <a name="input_variables"></a> [variables](#input\_variables) | n/a | `map(any)` | n/a | yes |
-| <a name="input_varset_description"></a> [varset\_description](#input\_varset\_description) | Description to add to the variable set | `string` | n/a | yes |
-
-
 ## ---> azure / modules  <a name="azure-tf"></a>
-### ToDo add project init details
-## Modules
+Using the following configuration, this Terraform module will create a Azure Kubernetes Service cluster, as well as a Azure Container Registry, simply by providing the bellow variables:
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_acr"></a> [acr](#module\_acr) | ./acr | n/a |
+```bash
+subscription_id = ""       # Your subscription ID
+resource_group  = ""       # Your RSG where the resources will be created
 
-### Providers
+rsg_location = "West US"
+registry_sku = "Standard"
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | 3.11.0 |
-
-### Resources
-| Name | Type |
-|------|------|
-| [azurerm_container_registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_registry) | resource |
-
-### Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_registry_name"></a> [registry\_name](#input\_registry\_name) | Name for Azure Container Registry | `string` | `"bestContainerRegistryEver"` | no |
-| <a name="input_registry_sku"></a> [registry\_sku](#input\_registry\_sku) | SKU to be used for the Container Registry | `string` | n/a | yes |
-| <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | Azure Resource Group for resources | `string` | n/a | yes |
-| <a name="input_rsg_location"></a> [rsg\_location](#input\_rsg\_location) | Resource Group Location | `string` | n/a | yes |
-| <a name="input_subscription_id"></a> [subscription\_id](#input\_subscription\_id) | Azure Subcription ID | `string` | n/a | yes |
+aks_nodepool_count = 2
+kubernetes_version = "1.23.12"
+aks_cluster_name   = "aks-test-lab"
+aks_nodepool_size  = "Standard_DS2_v2"
+```
 
 
 
