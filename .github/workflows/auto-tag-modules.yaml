@@ -1,15 +1,17 @@
 name: Auto-Tag Terraform Module
 
-on:
-  workflow_dispatch:
-    inputs:
-      module:
-        description: "Module directory (e.g. aks, vnet)"
-        required: true
-      bump:
-        description: "Version bump type: patch, minor, major"
-        required: true
-        default: "patch"
+
+on: push
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       module:
+#         description: "Module directory (e.g. aks, vnet)"
+#         required: true
+#       bump:
+#         description: "Version bump type: patch, minor, major"
+#         required: true
+#         default: "patch"
 
 jobs:
   auto-tag:
