@@ -1,0 +1,71 @@
+name: Auto-Tag Terraform Module
+
+on:
+  workflow_dispatch:
+    inputs:
+      module:
+        description: "Module directory (e.g. aks, vnet)"
+        required: true
+      bump:
+        description: "Version bump type: patch, minor, major"
+        required: true
+        default: "patch"
+
+jobs:
+  auto-tag:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required to access all tags
+
+      - name: Validate module directory exists
+        run: |
+          if [ ! -d "${{ github.event.inputs.module }}" ]; then
+            echo "❌ Module directory does not exist"
+            exit 1
+          fi
+
+      - name: Get latest tag
+        id: latest
+        run: |
+          TAG=$(git tag --list "${{ inputs.module }}-v*" --sort=-v:refname | head -n 1 | tr -d '\n')
+          echo "Found tag: $TAG"
+          echo "LATEST_TAG=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Bump version
+        id: version
+        run: |
+          MODULE="${{ github.event.inputs.module }}"
+          LATEST="${{ steps.latest.outputs.LATEST_TAG }}"
+          BUMP="${{ github.event.inputs.bump }}"
+
+          if [[ -z "$LATEST" ]]; then
+            NEW="v0.1.0"
+          else
+            ESCAPED_MODULE=$(echo "$MODULE" | sed 's/[^^]/[&]/g; s/\^/\\^/g')
+            VER=$(echo "$LATEST" | sed -E "s/^$ESCAPED_MODULE-v//")
+
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$VER"
+            if [[ "$BUMP" == "major" ]]; then
+              ((MAJOR++)); MINOR=0; PATCH=0
+            elif [[ "$BUMP" == "minor" ]]; then
+              ((MINOR++)); PATCH=0
+            else
+              ((PATCH++))
+            fi
+            NEW="v${MAJOR}.${MINOR}.${PATCH}"
+          fi
+          
+
+          echo NEW_TAG="$MODULE-$NEW" >> $GITHUB_OUTPUT
+          echo "📌 New tag: $MODULE-$NEW"
+
+      - name: Create and push new tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag ${{ steps.version.outputs.NEW_TAG }}
+          git push origin ${{ steps.version.outputs.NEW_TAG }}
