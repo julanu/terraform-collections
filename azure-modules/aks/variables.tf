@@ -90,9 +90,3 @@ variable "admin_group_object_ids" {
   type        = list(string)
   default     = null
 }
-
-variable "admin_user_object_id" {
-  description = "Azure AD Object ID of the admin user for AKS access"
-  type        = string
-  default     = null
-}

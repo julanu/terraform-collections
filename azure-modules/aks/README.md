@@ -34,9 +34,6 @@ admin_group_object_ids = [
   "00000000-0000-0000-0000-000000000001"
 ]
 
-# AAD user object IDs that should have admin access to the cluster
-admin_user_object_id = "00000000-0000-0000-0000-000000000001"
-
 # Node pool config
 aks_nodepool_size      = "Standard_DS2_v2"
 kubernetes_version     = "1.31.7"
