@@ -12,14 +12,14 @@ This Terraform module deploys an Azure Kubernetes Service (AKS) cluster with RBA
   - Autoscaling Support: Node pools can auto-scale between specified min/max counts
 
 #### Secure defaults:
-    - Local accounts are disabled.
-    - Network policy and plugin set to azure.
-    - Explicit control over RBAC scopes.
+    - Local accounts are disabled
+    - Network policy and plugin set to Azure
+    - Explicit control over RBAC scopes
 
 #### Features disabled or not included:
-    - No public IP access unless explicitly whitelisted via authorized_ip_ranges.
-    - No default role bindings outside of those explicitly defined in aks_rbac_roles.
-    - No node pool taints/labels/availability zones configured in this version.
+    - No public IP access unless explicitly whitelisted via authorized_ip_ranges
+    - No default role bindings outside of those explicitly defined in aks_rbac_roles
+    - No node pool taints/labels/availability zones configured in this version
 
 #### Example TFVARS:
 ```bash
@@ -38,7 +38,6 @@ admin_group_object_ids = [
 admin_user_object_id = "00000000-0000-0000-0000-000000000001"
 
 # Node pool config
-aks_nodepool_count     = 2
 aks_nodepool_size      = "Standard_DS2_v2"
 kubernetes_version     = "1.31.7"
 
@@ -72,6 +71,11 @@ tags = {
 
 # Optional: enable private cluster mode and autoscaling
 enable_private_cluster = true
-enable_autoscaling     = true
+
+enable_autoscaling   = true
+min_node_count       = 1
+max_node_count       = 3
+aks_nodepool_count   = 2 # Ignored if autoscaling is true
+
 
 ```

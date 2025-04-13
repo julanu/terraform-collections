@@ -76,7 +76,7 @@ variable "aks_rbac_roles" {
   default = {
     "Reader"      = ["", ""],
     "Contributor" = [""],
-    "Owner" = [""]
+    "Owner"       = [""]
   }
 }
 
@@ -88,11 +88,11 @@ variable "tenant_id" {
 variable "admin_group_object_ids" {
   description = "List of AAD group object IDs that will be cluster admins"
   type        = list(string)
-  default = null
+  default     = null
 }
 
 variable "admin_user_object_id" {
   description = "Azure AD Object ID of the admin user for AKS access"
   type        = string
-  default = null
+  default     = null
 }

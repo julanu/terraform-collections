@@ -7,12 +7,11 @@ resource "azurerm_kubernetes_cluster" "cluster" {
 
   default_node_pool {
     name       = "default"
-    node_count = var.aks_nodepool_count
+    node_count = var.enable_autoscaling ? null : var.aks_nodepool_count
     vm_size    = var.aks_nodepool_size
 
-    # min_count = var.min_node_count
-    # max_count = var.max_node_count
-
+    min_count            = var.enable_autoscaling ? var.min_node_count : null
+    max_count            = var.enable_autoscaling ? var.max_node_count : null
     auto_scaling_enabled = var.enable_autoscaling
   }
 
@@ -46,6 +45,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
   tags = var.tags
 }
 
+# Dynamic mapping to add users to different pre-established IAM roles
 resource "azurerm_role_assignment" "aks_rbac" {
   for_each = {
     for pair in flatten([
@@ -66,8 +66,3 @@ resource "azurerm_role_assignment" "aks_rbac" {
   principal_id         = each.value.principal_id
   scope                = azurerm_kubernetes_cluster.cluster.id
 }
-# resource "azurerm_role_assignment" "aks_user_admin" {
-#   principal_id         = var.admin_user_object_id
-#   role_definition_name = "Azure Kubernetes Service RBAC Cluster Admin"
-#   scope                = azurerm_kubernetes_cluster.cluster.id
-# }
